@@ -105,12 +105,8 @@ app.config.update(
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index' , methods=['GET', 'POST'])
 def index():             
-    form = GoButton(request.form)
-    if form.is_submitted():
-        auth_url = sp_oauth.get_authorize_url()
-        return redirect(auth_url)
-
-    return render_template("index.html")
+    auth_url = sp_oauth.get_authorize_url()
+    return render_template("index.html", auth_url=auth_url)
 
 @app.route('/callback')
 def callback():
