@@ -70,6 +70,7 @@ def callback():
     else:
         return 'gg'
 
+
 @app.route('/logic')
 def logic():
     """Performs the logic for determining which songs to take
@@ -77,7 +78,7 @@ def logic():
     gets the first 20 saved songs from the user's spotify library.
     Performs tone analysis on the songs and pciks the scores which
     are closes to the users mood. Each songs gets an array of values for each
-    emotion and the logic sorts songs on arrays are closest to the users. Gets 
+    emotion and the logic sorts songs on arrays are closest to the users. Gets
     a list of their uri and a list of (song name, artist).
 
     """
@@ -88,15 +89,16 @@ def logic():
 
     all_tracks = sp.current_user_saved_tracks()
 
+    print all_tracks
     # Hard coding for now, but we'll add user input
-    user_mood = np.array([0, 1, 0, 0, 0])
+    user_mood = np.array([1, 0, 0, 0, 0])
 
     # get all songs
     our_tracks = []
     for item in all_tracks['items']:
         track = item['track']
         our_tracks.append((track['name'], track['artists'][0]['name'], track['uri']))
-   
+
     # choose 100 songs at random
     if len(our_tracks) > 100:
         random.shuffle(our_tracks)
@@ -110,6 +112,7 @@ def logic():
 
     # get the emotion scores of all songs
     emotion_by_song = tone.get_all_emotions(song_lyrics)
+
     # rank the songs
     song_rankings = []
     for song_data in emotion_by_song:
@@ -118,22 +121,25 @@ def logic():
         song_rankings.append((song_data[0], difference))
 
     song_rankings = sorted(song_rankings, key=itemgetter(1))
-   
+
    # get the top 5 results
     results = []
     result_info = []
     for i in range(min(NUM_SONGS, len(song_rankings))):
         results.append(song_rankings[i][0])
+
     result_tracks = sp.tracks(results)
+    print 'hello'
+    # print result_tracks['tracks']
     # get names and artists of those songs
-    for result in result_tracks['items']:
-        track = result['track']
+    for track in result_tracks['tracks']:
+        # track = result['track']
         result_info.append((track['name'], track['artists'][0]['name']))
 
     print result_info
-        
 
-    return render_template("index.html", auth_url=auth_url)
+
+    return render_template("index.html")
 
    
 
