@@ -9,6 +9,12 @@ import tone as tone
 import numpy as np
 from operator import itemgetter
 
+def kullback_leibler(start_dist, end_dist):
+    """
+    Assumes start_dist, end_dist are NumPy arrays.
+    """
+    return np.sum(np.multiply(end_dist, np.log(end_dist / start_dist)))
+
 def getAllTracks(sp):
     tracks = []
 
@@ -58,7 +64,7 @@ SCOPE = 'user-library-read playlist-read-private playlist-read-collaborative pla
 CACHE = '.spotipyoauthcache'
 
 STATE = generateRandomString(16)
-NUM_SONGS = 5
+NUM_SONGS = 10
 
 sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
                                state=STATE,scope=SCOPE,cache_path=CACHE)
@@ -114,22 +120,19 @@ def logic():
     "fear" : 2,
     "sadness" : 3,
     "disgust" : 4
-}
+    }
     # Hard coding for now, but we'll add user input
-<<<<<<< HEAD
-    user_mood = np.array([0, 1, 0, 0, 0])
-=======
-    user_mood = np.array([0] * 5)
-    mood = 'joy'
-    user_mood[EMOTION_IDX[mood]] = 1
->>>>>>> e4acc37de0a7ae28d200b071a9f0f415732c764b
+    # user_mood = np.array([0] * 5)
+    # mood = 'sadness'
+    # user_mood[EMOTION_IDX[mood]] = 1
+    user_mood = np.array([0.5, 0, 0, 0.5, 0])
 
     # get all songs
     our_tracks = getAllTracks(sp)
-    
+
     # choose 100 songs at random
     if len(our_tracks) > 100:
-        random.shuffle(our_tracks)
+        #random.shuffle(our_tracks)
         our_tracks = our_tracks[0:100]
     # get the lyrics for all songs
     song_lyrics = []
@@ -144,11 +147,14 @@ def logic():
     # rank the songs
     song_rankings = []
     for song_data in emotion_by_song:
-        feeling = song_data[1]
+        feeling = song_data[1] / np.sum(song_data[1])
+        # cost = kullback_leibler(feeling, user_mood)
+        # cost = kullback_leibler(user_mood, feeling)
         difference = np.linalg.norm(user_mood - feeling)
-        specific_difference = np.abs(user_mood[EMOTION_IDX[mood]] - feeling[user_mood[EMOTION_IDX[mood]]])
-        cost = difference + 2 * specific_difference
-        song_rankings.append((song_data[0], cost))
+        # specific_difference = np.abs(user_mood[EMOTION_IDX[mood]] - feeling[user_mood[EMOTION_IDX[mood]]])
+        # cost = difference + specific_difference
+        cost = difference
+        song_rankings.append((song_data[0], cost, feeling))
 
     song_rankings = sorted(song_rankings, key=itemgetter(1))
 
@@ -159,7 +165,8 @@ def logic():
         results.append(song_rankings[i][0])
 
     result_tracks = sp.tracks(results)
-    print 'hello'
+    #print 'hello'
+    #Sprint song_rankings
     # print result_tracks['tracks']
     # get names and artists of those songs
     for track in result_tracks['tracks']:
