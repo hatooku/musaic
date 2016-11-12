@@ -93,4 +93,4 @@ ENV/
 # Rope project settings
 .ropeproject
 
-.spotifyoauthcache
+.spotipyoauthcache
