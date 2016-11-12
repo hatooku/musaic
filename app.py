@@ -4,8 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import spotipy
 from spotipy import oauth2
 import spotipy.util as util
-import lyrics
-import tone
+import lyrics as ly
+import tone as tn
 import numpy as np
 from operator import itemgetter
 
@@ -104,12 +104,12 @@ def logic():
     # get the lyrics for all songs
     song_lyrics = []
     for song in our_tracks:
-        lyrics = lyrics.get_lyrics(song[0], song[1])
+        lyrics = ly.get_lyrics(song[0], song[1])
         if lyrics != '':
             song_lyrics.append((song[2], lyrics))
 
     # get the emotion scores of all songs
-    emotion_by_song = tone.get_all_emotions(song_lyrics)
+    emotion_by_song = tn.get_all_emotions(song_lyrics)
     # rank the songs
     song_rankings = []
     for song_data in emotion_by_song:
@@ -127,7 +127,7 @@ def logic():
     result_tracks = sp.tracks(results)
     # get names and artists of those songs
     for result in result_tracks['items']:
-        track = result['track']
+        track = item['track']
         result_info.append((track['name'], track['artists'][0]['name']))
 
     print result_info
