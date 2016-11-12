@@ -4,6 +4,10 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import spotipy
 from spotipy import oauth2
 import spotipy.util as util
+import lyrics as ly
+import tone as tn
+import numpy as np
+from operator import itemgetter
 
 
 def generateRandomString(length): 
@@ -32,6 +36,7 @@ SCOPE = 'user-library-read playlist-read-private playlist-read-collaborative pla
 CACHE = '.spotipyoauthcache'
 
 STATE = generateRandomString(16)
+NUM_SONGS = 5
 
 sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
                                state=STATE,scope=SCOPE,cache_path=CACHE)
@@ -67,14 +72,70 @@ def callback():
 
 @app.route('/logic')
 def logic():
+    """Performs the logic for determining which songs to take
+
+    gets the first 20 saved songs from the user's spotify library.
+    Performs tone analysis on the songs and pciks the scores which
+    are closes to the users mood. Each songs gets an array of values for each
+    emotion and the logic sorts songs on arrays are closest to the users. Gets 
+    a list of their uri and a list of (song name, artist).
+
+    """
     token = session["TOKEN"]
     access_token = token["access_token"]
 
     sp = spotipy.Spotify(auth=access_token)
 
-    tracks = sp.getAllTracks(sp)
+    all_tracks = sp.current_user_saved_tracks()
 
-    print tracks
+    # Hard coding for now, but we'll add user input
+    user_mood = np.array([0, 1, 0, 0, 0])
+
+    # get all songs
+    our_tracks = []
+    for item in all_tracks['items']:
+        track = item['track']
+        our_tracks.append((track['name'], track['artists'][0]['name'], track['uri']))
+   
+    # choose 100 songs at random
+    if len(our_tracks) > 100:
+        random.shuffle(our_tracks)
+        our_tracks = our_tracks[0:100]
+    # get the lyrics for all songs
+    song_lyrics = []
+    for song in our_tracks:
+        lyrics = ly.get_lyrics(song[0], song[1])
+        if lyrics != '':
+            song_lyrics.append((song[2], lyrics))
+
+    # get the emotion scores of all songs
+    emotion_by_song = tn.get_all_emotions(song_lyrics)
+    # rank the songs
+    song_rankings = []
+    for song_data in emotion_by_song:
+        feeling = song_data[1]
+        difference = np.linalg.norm(user_mood - feeling)
+        song_rankings.append((song_data[0], difference))
+
+    song_rankings = sorted(song_rankings, key=itemgetter(1))
+   
+   # get the top 5 results
+    results = []
+    result_info = []
+    for i in range(min(NUM_SONGS, len(song_rankings))):
+        results.append(song_rankings[i][0])
+    result_tracks = sp.tracks(results)
+    # get names and artists of those songs
+    for result in result_tracks['items']:
+        track = item['track']
+        result_info.append((track['name'], track['artists'][0]['name']))
+
+    print result_info
+        
+
+    return render_template("index.html", auth_url=auth_url)
+
+   
 
     # if code:
     #     token = sp_oauth.get_access_token(code)
