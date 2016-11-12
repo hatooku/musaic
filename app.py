@@ -9,6 +9,28 @@ import tone as tone
 import numpy as np
 from operator import itemgetter
 
+def getAllTracks(sp):
+    tracks = []
+
+    SONGS_PER_TIME = 50
+    offset=0
+
+    while True:
+        SPTracks = sp.current_user_saved_tracks(limit=SONGS_PER_TIME, offset=offset) 
+
+        if len(SPTracks["items"]) == 0:
+        #if offset >= 50:
+            break
+
+        for song in SPTracks["items"]:
+            track = song["track"]
+            song_item = (track["name"], track["artists"][0]["name"], track["uri"])
+            tracks.append(song_item)
+
+        offset += SONGS_PER_TIME
+
+    return tracks
+
 
 def generateRandomString(length): 
     text = '';
@@ -84,21 +106,14 @@ def logic():
     """
     token = session["TOKEN"]
     access_token = token["access_token"]
-
     sp = spotipy.Spotify(auth=access_token)
-
-    all_tracks = sp.current_user_saved_tracks()
-
-    print all_tracks
+    
     # Hard coding for now, but we'll add user input
     user_mood = np.array([1, 0, 0, 0, 0])
 
     # get all songs
-    our_tracks = []
-    for item in all_tracks['items']:
-        track = item['track']
-        our_tracks.append((track['name'], track['artists'][0]['name'], track['uri']))
-
+    our_tracks = getAllTracks(sp)
+    
     # choose 100 songs at random
     if len(our_tracks) > 100:
         random.shuffle(our_tracks)
