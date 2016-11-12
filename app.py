@@ -8,6 +8,7 @@ import lyrics as Lyrics
 import tone as tone
 import numpy as np
 from operator import itemgetter
+import forms
 
 def kullback_leibler(start_dist, end_dist):
     """
@@ -77,12 +78,15 @@ app.config.update(
 
 
 # controllers
-@app.route('/')
-@app.route('/index')
-def index():
-    auth_url = sp_oauth.get_authorize_url()
-    return redirect(auth_url)
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index' , methods=['GET', 'POST'])
+def index():             
+    form = GoButton(request.form)
+    if form.is_submitted():
+        auth_url = sp_oauth.get_authorize_url()
+        return redirect(auth_url)
 
+    return render_template("index.html")
 
 @app.route('/callback')
 def callback():
@@ -92,12 +96,29 @@ def callback():
     if code and state == STATE:
         token = sp_oauth.get_access_token(code)
         session["TOKEN"] = token
-        # auth_url = sp_oauth.get_authorize_url()
-        # return render_template(auth_url)
-        return redirect(url_for('logic'))
+        return redirect('/mood')
     else:
         return 'gg'
 
+@app.route('/mood')
+def getMood():
+    form_a = MoodButtons(request.form)
+    form_b = MoodText(request.form)
+    if form_a.is_submitted():
+        mood = []
+        if form_a.anger.data:
+            mood  = [1, 0, 0, 0, 0]
+        elif form_a.joy.data:
+            mood  = [0, 1, 0, 0, 0]
+        else: 
+            mood  = [0, 0, 0, 1, 0]
+        session['mood'] = mood
+        return redirect('/logic')
+    elif request.method == 'POST' and form_b.validate():
+        mood = []
+        session['mood'] = mood
+        return redirect('/logic')
+    return render_template("mood.html")
 
 @app.route('/logic')
 def logic():
@@ -125,7 +146,7 @@ def logic():
     # user_mood = np.array([0] * 5)
     # mood = 'sadness'
     # user_mood[EMOTION_IDX[mood]] = 1
-    user_mood = np.array([0.5, 0, 0, 0.5, 0])
+    user_mood = session['mood']
 
     # get all songs
     our_tracks = getAllTracks(sp)
