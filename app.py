@@ -101,12 +101,16 @@ app.config.update(
     DEBUG=True,
 )
 
+
 # controllers
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index' , methods=['GET', 'POST'])
-def index():             
+
+
+@app.route('/index', methods=['GET', 'POST'])
+def index():
     auth_url = sp_oauth.get_authorize_url()
     return render_template("index.html", auth_url=auth_url)
+
 
 @app.route('/callback')
 def callback():
@@ -119,6 +123,7 @@ def callback():
         return redirect('/mood')
     else:
         return 'gg'
+
 
 @app.route('/mood')
 def getMood():
@@ -140,6 +145,7 @@ def getMood():
         return redirect('/logic')
     return render_template("mood.html")
 
+
 @app.route('/landing')
 def landing():
     return render_template("index.html")
@@ -147,26 +153,30 @@ def landing():
 
 @app.route('/logic')
 def logic():
-    """Performs the logic for determining which songs to take
+    """
+    Gets the first 20 saved songs from the user's Spotify library.
+    Performs tone analysis on the songs and picks the scores which
+    are closest to the user's mood.
 
-    gets the first 20 saved songs from the user's spotify library.
-    Performs tone analysis on the songs and pciks the scores which
-    are closes to the users mood. Each songs gets an array of values for each
-    emotion and the logic sorts songs on arrays are closest to the users. Gets
-    a list of their uri and a list of (song name, artist).
+    Each song is sent through IBM Watson Sentiment Analysis to get an encoding over
+    the 5 possible emotions (anger, joy, fear, sadness, and disgust).
 
+    We then sort songs based on how close the emotional encoding is to the user's
+    desired encoding. Then for the top N songs we get a list of the URIs, and
+    (song name, artist) tuples.
     """
     token = session["TOKEN"]
     access_token = token["access_token"]
     sp = spotipy.Spotify(auth=access_token)
-    
+
     EMOTION_IDX = {
-    "anger" : 0,
-    "joy" : 1,
-    "fear" : 2,
-    "sadness" : 3,
-    "disgust" : 4
+        "anger" : 0,
+        "joy" : 1,
+        "fear" : 2,
+        "sadness" : 3,
+        "disgust" : 4
     }
+
     # Hard coding for now, but we'll add user input
     # user_mood = np.array([0] * 5)
     # mood = 'sadness'
@@ -178,8 +188,9 @@ def logic():
 
     # choose 100 songs at random
     if len(our_tracks) > 100:
-        #random.shuffle(our_tracks)
+        # random.shuffle(our_tracks)
         our_tracks = our_tracks[0:100]
+
     # get the lyrics for all songs
     song_lyrics = []
     for song in our_tracks:
@@ -190,7 +201,7 @@ def logic():
     # get the emotion scores of all songs
     emotion_by_song = tone.get_all_emotions(song_lyrics)
 
-    # rank the songs
+    # rank the songs based on closeness of emotional encoding to desired encoding
     song_rankings = []
     for song_data in emotion_by_song:
         feeling = song_data[1] / np.sum(song_data[1])
@@ -204,7 +215,7 @@ def logic():
 
     song_rankings = sorted(song_rankings, key=itemgetter(1))
 
-   # get the top 5 results
+    # get the top N results
     results = []
     result_info = []
     for i in range(min(NUM_SONGS, len(song_rankings))):
@@ -212,7 +223,6 @@ def logic():
 
     result_tracks = sp.tracks(results)
 
-    # print song_rankings
     # print result_tracks['tracks']
     # get names and artists of those songs
     for track in result_tracks['tracks']:
@@ -227,14 +237,6 @@ def logic():
     create_playlist(sp, list_of_uris, user, playlist_name)
 
     return redirect(url_for('landing'))
-
-    # if code:
-    #     token = sp_oauth.get_access_token(code)
-    #     session["TOKEN"] = token
-    # token = sp_oauth.get_access_token(code)
-
-    # auth_url = sp_oauth.get_authorize_url()
-    # return render_template("index.html", auth_url=auth_url)
 
 
 # launch
