@@ -1,5 +1,7 @@
-import os, sys
-import random, math
+import os
+import sys
+import random
+import math
 from flask import Flask, render_template, request, redirect, url_for, session
 import spotipy
 from spotipy import oauth2
@@ -10,23 +12,34 @@ import numpy as np
 from operator import itemgetter
 import forms
 
+
 def kullback_leibler(start_dist, end_dist):
     """
     Assumes start_dist, end_dist are NumPy arrays.
+
+    Computes Kullback-Leibler divergence from start dist to end dist.
     """
-    return np.sum(np.multiply(end_dist, np.log(end_dist / start_dist)))
+    kl_vec = np.multiply(end_dist, np.log(end_dist / start_dist))
+
+    # Gotta deal with 0 * log(0)s and such...
+    for i, e in enumerate(kl_vec):
+        if e == np.nan:
+            kl_vec[i] = 0
+    return np.sum(kl_vec)
+
 
 def getAllTracks(sp):
     tracks = []
 
-    SONGS_PER_TIME = 50
-    offset=0
+    SONGS_PER_TIME = 50  # number of songs to request from Spotify API.
+    offset = 0  # index to start song requests
 
     while True:
-        SPTracks = sp.current_user_saved_tracks(limit=SONGS_PER_TIME, offset=offset) 
+        SPTracks = sp.current_user_saved_tracks(limit=SONGS_PER_TIME,
+                                                offset=offset)
 
         if len(SPTracks["items"]) == 0:
-        #if offset >= 50:
+        # if offset >= 50:
             break
 
         for song in SPTracks["items"]:
@@ -39,9 +52,20 @@ def getAllTracks(sp):
     return tracks
 
 
+"""
+Given a list of Spotify URIs and a desired playlist name, add all the songs
+specified by the URIs to a new playlist.
+"""
+def create_playlist(sp, list_of_uris, user, playlist_name):
+    new_playlist = sp.user_playlist_create(user, playlist_name, public=True)['uri']
+    results = sp.user_playlist_add_tracks(user, new_playlist,
+                                          list_of_uris, position=None)
+    return results
+
+
 def generateRandomString(length): 
-    text = '';
-    possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    text = ''
+    possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
     for i in range(length):
         text += possible[int(math.floor(random.random() * len(possible)))]
@@ -120,6 +144,11 @@ def getMood():
         return redirect('/logic')
     return render_template("mood.html")
 
+@app.route('/landing')
+def landing():
+    return render_template("index.html")
+
+
 @app.route('/logic')
 def logic():
     """Performs the logic for determining which songs to take
@@ -186,17 +215,22 @@ def logic():
         results.append(song_rankings[i][0])
 
     result_tracks = sp.tracks(results)
-    #print 'hello'
-    #Sprint song_rankings
+
+    # print song_rankings
     # print result_tracks['tracks']
     # get names and artists of those songs
     for track in result_tracks['tracks']:
         # track = result['track']
         result_info.append((track['name'], track['artists'][0]['name']))
 
-    print result_info
+    # print result_info
 
-    return render_template("index.html")
+    user = "caltechcalhacks"
+    playlist_name = 'testing'
+    list_of_uris = ["3VvBPkc24zC7x05mgJTyGO"]
+    create_playlist(sp, list_of_uris, user, playlist_name)
+
+    return redirect(url_for('landing'))
 
     # if code:
     #     token = sp_oauth.get_access_token(code)
