@@ -16,7 +16,6 @@ import forms
 def kullback_leibler(start_dist, end_dist):
     """
     Assumes start_dist, end_dist are NumPy arrays.
-
     Computes Kullback-Leibler divergence from start dist to end dist.
     """
     kl_vec = np.multiply(end_dist, np.log(end_dist / start_dist))
@@ -29,6 +28,9 @@ def kullback_leibler(start_dist, end_dist):
 
 
 def getAllTracks(sp):
+    """
+    Pulls all saved songs from user library, 50 at a time (Spotify rate limit).
+    """
     tracks = []
 
     SONGS_PER_TIME = 50  # number of songs to request from Spotify API.
@@ -39,7 +41,6 @@ def getAllTracks(sp):
                                                 offset=offset)
 
         if len(SPTracks["items"]) == 0:
-        # if offset >= 50:
             break
 
         for song in SPTracks["items"]:
@@ -52,11 +53,11 @@ def getAllTracks(sp):
     return tracks
 
 
-"""
-Given a list of Spotify URIs and a desired playlist name, add all the songs
-specified by the URIs to a new playlist.
-"""
 def create_playlist(sp, list_of_uris, user, playlist_name):
+    """
+    Given a list of Spotify URIs and a desired playlist name, add all the songs
+    specified by the URIs to a new playlist.
+    """
     new_playlist = sp.user_playlist_create(user, playlist_name, public=True)['uri']
     results = sp.user_playlist_add_tracks(user, new_playlist,
                                           list_of_uris, position=None)
@@ -81,7 +82,7 @@ SPOTIPY_CLIENT_SECRET = 'fd20b73ca2ae47aab8172982417bbdd2'
 PRODUCTION = False
 
 if PRODUCTION:
-    SPOTIPY_REDIRECT_URI = 'https://hello.herokuapp.com/callback'
+    SPOTIPY_REDIRECT_URI = 'https://musicapp.herokuapp.com/callback'
 else:
     SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
 
@@ -92,14 +93,13 @@ STATE = generateRandomString(16)
 NUM_SONGS = 10
 
 sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
-                               state=STATE,scope=SCOPE,cache_path=CACHE)
+                               state=STATE, scope=SCOPE, cache_path=CACHE)
 
 # initialization
 app = Flask(__name__)
 app.config.update(
     DEBUG=True,
 )
-
 
 # controllers
 @app.route('/', methods=['GET', 'POST'])
