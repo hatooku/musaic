@@ -9,6 +9,14 @@ tone_analyzer = ToneAnalyzerV3(
    password="mfLRLZmBc6Jb",
    version="2016-05-19")
 
+EMOTION_IDX = {
+    "anger" : 0,
+    "joy" : 1,
+    "fear" : 2,
+    "sadness" : 3,
+    "disgust" : 4
+}
+
 def get_emotions(lyrics):
     """Returns the emotions contained in the lyrics.
 
@@ -23,9 +31,9 @@ def get_emotions(lyrics):
     result = tone_analyzer.tone(text=lyrics, tones="emotion", sentences="false")
     tones = result['document_tone']['tone_categories'][0]["tones"]
 
-    data = {}
+    data = [0.0 for _ in range(5)]
     for tone_data in tones:
-        data[str(tone_data['tone_id'])] = tone_data['score']
+        data[EMOTION_IDX[str(tone_data['tone_id'])]] = tone_data['score']
         
     return data
 
@@ -57,4 +65,3 @@ def get_all_emotions(songs_arr):
         data.append(queue.get())
 
     return data
-
