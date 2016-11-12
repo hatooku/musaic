@@ -109,7 +109,7 @@ def logic():
     sp = spotipy.Spotify(auth=access_token)
     
     # Hard coding for now, but we'll add user input
-    user_mood = np.array([1, 0, 0, 0, 0])
+    user_mood = np.array([0, 1, 0, 0, 0])
 
     # get all songs
     our_tracks = getAllTracks(sp)
@@ -153,10 +153,7 @@ def logic():
 
     print result_info
 
-
     return render_template("index.html")
-
-   
 
     # if code:
     #     token = sp_oauth.get_access_token(code)
