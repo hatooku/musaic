@@ -108,8 +108,17 @@ def logic():
     access_token = token["access_token"]
     sp = spotipy.Spotify(auth=access_token)
     
+    EMOTION_IDX = {
+    "anger" : 0,
+    "joy" : 1,
+    "fear" : 2,
+    "sadness" : 3,
+    "disgust" : 4
+}
     # Hard coding for now, but we'll add user input
-    user_mood = np.array([1, 0, 0, 0, 0])
+    user_mood = np.array([0] * 5)
+    mood = 'joy'
+    user_mood[EMOTION_IDX[mood]] = 1
 
     # get all songs
     our_tracks = getAllTracks(sp)
@@ -133,7 +142,9 @@ def logic():
     for song_data in emotion_by_song:
         feeling = song_data[1]
         difference = np.linalg.norm(user_mood - feeling)
-        song_rankings.append((song_data[0], difference))
+        specific_difference = np.abs(user_mood[EMOTION_IDX[mood]] - feeling[user_mood[EMOTION_IDX[mood]]])
+        cost = difference + 2 * specific_difference
+        song_rankings.append((song_data[0], cost))
 
     song_rankings = sorted(song_rankings, key=itemgetter(1))
 
