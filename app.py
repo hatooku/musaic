@@ -10,7 +10,7 @@ import lyrics as Lyrics
 import tone as tone
 import numpy as np
 from operator import itemgetter
-import forms
+from forms import *
 
 
 def kullback_leibler(start_dist, end_dist):
