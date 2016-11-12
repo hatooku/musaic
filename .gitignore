@@ -1,3 +1,5 @@
+.spotipyoauthcache
+
 # Macs
 .DS_Store
 
@@ -92,5 +94,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-.spotifyoauthcache
