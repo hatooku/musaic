@@ -130,7 +130,6 @@ def mood():
     elif buttons_form.validate_on_submit():
         mood = []
         if buttons_form.anger.data:
-            print 'cuter'
             mood  = [1, 0, 0, 0, 0]
         elif buttons_form.joy.data:
             mood  = [0, 1, 0, 0, 0]
@@ -154,11 +153,23 @@ def results():
     desired encoding. Then for the top N songs we get a list of the URIs, and
     (song name, artist) tuples.
     """
+
     if "TOKEN" not in session:
         return redirect(url_for('index'))
+
     token = session["TOKEN"]
     access_token = token["access_token"]
+    form = PlaylistButton()
     sp = spotipy.Spotify(auth=access_token)
+
+    if form.validate_on_submit():
+        print "Making playlist..."
+        user = sp.current_user()['id']
+        playlist_name = form.name.data
+        desired_songs_uris = session["trackset_str"].split(',')
+        create_playlist(sp, desired_songs_uris, user, playlist_name)
+
+        return "YAY!"
 
     EMOTION_IDX = {
         "anger" : 0,
@@ -209,17 +220,12 @@ def results():
     for track in result_tracks['tracks']:
         desired_songs_uris.append(track['uri'][14:])
 
-    form = PlaylistButton()
-
-    if form.is_submitted() and form.validate():
-        print "Making playlist..."
-        user = sp.current_user()
-        playlist_name = form.name.data
-        create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
-
     trackset_str = ','.join(e for e in desired_songs_uris)
 
-    return render_template("results.html", x = trackset_str, form=form)
+    session["trackset_str"] = trackset_str
+
+
+    return render_template("results.html", uris = trackset_str, form=form)
 
 
 # launch the app

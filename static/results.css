@@ -1,19 +1,21 @@
-div {
+iframe {
+    position: absolute;
+    left: 15%;
+    top: 25%;
+}
+
+
+.description {
+    color: white;
+    font-family: "Raleway", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 20%;
     text-align: center;
-    width: 100%;
-    vertical-align: middle;
-    height: 100%;
-    display: table-cell;
 }
-.iframe{
-  width: 200px;
-}
-div,
-body,
-html {
-    height: 100%;
-    width: 100%;
-}
-body{
-    display: table;
+
+.playlist_form {
+    position: absolute;
+    right: 23%;
+    top: 25%;
 }
