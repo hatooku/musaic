@@ -143,7 +143,7 @@ def getMood():
         mood = []
         session['mood'] = mood
         return redirect('/logic')
-    return render_template("mood.html")
+    return render_template("mood.html", form = form_a)
 
 @app.route('/landing')
 def landing():
