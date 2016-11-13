@@ -165,12 +165,7 @@ def results():
         "disgust" : 4
     }
 
-    # Hard coding for now, but we'll add user input
-    # user_mood = np.array([0] * 5)
-    # mood = 'sadness'
-    # user_mood[EMOTION_IDX[mood]] = 1
-    # user_mood = session['mood']
-    user_mood = np.array([0, 1, 0, 0, 0])
+    user_mood = session['mood']
 
     # get all songs
     our_tracks = getAllTracks(sp)
@@ -194,12 +189,7 @@ def results():
     song_rankings = []
     for song_data in emotion_by_song:
         feeling = song_data[1] / np.sum(song_data[1])
-        # cost = kullback_leibler(feeling, user_mood)
-        # cost = kullback_leibler(user_mood, feeling)
-        difference = np.linalg.norm(user_mood - feeling)
-        # specific_difference = np.abs(user_mood[EMOTION_IDX[mood]] - feeling[user_mood[EMOTION_IDX[mood]]])
-        # cost = difference + specific_difference
-        cost = difference
+        cost = np.linalg.norm(user_mood - feeling)
         song_rankings.append((song_data[0], cost, feeling))
 
     song_rankings = sorted(song_rankings, key=itemgetter(1))
@@ -217,22 +207,16 @@ def results():
         desired_songs_uris.append(track['uri'][14:])
 
     form = PlaylistButton(request.form)
-    # result_tracks = session['result_tracks']
 
-    # get names and artists of those songs -> result_info
-    # for track in result_tracks['tracks']:
-    #     result_info.append((track['name'], track['artists'][0]['name']))
-    # print result_info later???
-
-    if form.is_submitted():
+    if form.is_submitted() and form.validate():
         print "Making playlist..."
-        user = "caltechcalhacks"
-        playlist_name = 'My personalized playlist'
+        user = sp.current_user()
+        playlist_name = form.name.data
         create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
 
     trackset_str = ','.join(e for e in desired_songs_uris)
 
-    return render_template("results.html", x = trackset_str)
+    return render_template("results.html", x = trackset_str, form=form)
 
 
 # launch the app
