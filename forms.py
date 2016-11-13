@@ -11,5 +11,14 @@ class MoodText(Form):
     text = StringField('Mood')
     startButton = SubmitField("That's how I'm feeling baby")
 
+<<<<<<< HEAD
 class PlaylistButton(Form):
 	make = SubmitField("That sounds dank. I'll order 1 playlist of that please")
+=======
+class MoodText(Form):
+    test = StringField('Username')
+    startButton = SubmitField("That's how I'm feeling baby")
+
+class PlaylistButton(Form):
+    make = SubmitField("That sounds dank. I'll order 1 playlist of that please")
+>>>>>>> 5ef0c243a397e33dec7241624749f5e601694696

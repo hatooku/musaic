@@ -120,7 +120,7 @@ def callback():
     if code and state == STATE:
         token = sp_oauth.get_access_token(code)
         session["TOKEN"] = token
-        return redirect(url_for('/logic'))
+        return redirect(url_for('logic'))
     else:
         return 'gg'
 
@@ -139,11 +139,11 @@ def getMood():
         else: 
             mood  = [0, 0, 0, 1, 0]
         session['mood'] = mood
-        return redirect(url_for('/logic'))
+        return redirect(url_for('logic'))
     elif request.method == 'POST' and form_b.validate():
         mood = []
         session['mood'] = mood
-        return redirect(url_for('/logic'))
+        return redirect(url_for('logic'))
     return render_template("mood.html", form_a = form_a, form_b = form_b)
 
 
@@ -235,7 +235,7 @@ def logic():
     return redirect(url_for('result'))
 
 @app.route('/result',  methods=['GET', 'POST'])
-def results():
+def result():
     form = PlaylistButton(request.form)
     result_tracks = session['result_tracks']
 
