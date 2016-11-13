@@ -1,3 +1,10 @@
+<script type="text/javascript">// <![CDATA[
+        function preloader(){
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }//preloader
+        window.onload = preloader;
+// ]]></script>
 {% extends "base.html" %}
 {% block css %}
 <link rel="stylesheet" href={{ url_for('static', filename='results.css') }}>
@@ -5,6 +12,8 @@
 
 {% block content %}
 
+<div id="loading"></div>
+<div id="content">
 <div class="container">
     <iframe src={{"https://embed.spotify.com/?uri=spotify:trackset:" + uris}} width="400" height="500" frameborder="0" allowtransparency="true"></iframe>
 
@@ -25,7 +34,6 @@
         </form>
     </div>
 </div>
-
-
+</div>
 
 {% endblock %}

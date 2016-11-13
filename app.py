@@ -219,7 +219,7 @@ def results():
 
     trackset_str = ','.join(e for e in desired_songs_uris)
 
-    return render_template("results.html", x = trackset_str, form=form)
+    return render_template("results.html", uris = trackset_str, form=form)
 
 
 # launch the app
