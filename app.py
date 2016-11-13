@@ -137,6 +137,14 @@ def mood():
             mood  = [0, 0, 0, 1, 0]
         session['mood'] = mood
         return redirect(url_for('results'))
+    elif request.method == 'POST' and text_form.validate():
+        mood = tone.get_emotions(text_form.text.data)
+        session['mood'] = mood
+        print text_form.text.data
+        print mood  # FIX DEBUG
+        print mood == True
+        return redirect(url_for('results'))
+
     return render_template("mood.html", buttons_form = buttons_form, text_form = text_form)
 
 @app.route('/results', methods=['GET', 'POST'])
@@ -189,12 +197,15 @@ def results():
         # random.shuffle(our_tracks)
         our_tracks = our_tracks[0:100]
 
-    # get the lyrics for all songs
-    song_lyrics = []
-    for song in our_tracks:
-        lyrics = Lyrics.get_lyrics(song[0], song[1])
-        if lyrics != '':
-            song_lyrics.append((song[2], lyrics))
+    # get the lyrics for all songs (sequentially)
+    # song_lyrics = []
+    # for song in our_tracks:
+    #     lyrics = Lyrics.get_lyrics(song[0], song[1])
+    #     if lyrics != '':
+    #         song_lyrics.append((song[2], lyrics))
+
+    # get the lyrics for all songs (parallelized)
+    song_lyrics = Lyrics.get_all_lyrics(our_tracks)
 
     # get the emotion scores of all songs
     emotion_by_song = tone.get_all_emotions(song_lyrics)
@@ -210,7 +221,7 @@ def results():
 
     # get the top N results
     results = []
-    #result_info = []
+    # result_info = []
     for i in range(min(NUM_SONGS, len(song_rankings))):
         results.append(song_rankings[i][0])
 
