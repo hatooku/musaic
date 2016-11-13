@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import TextAreaField, TextField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, InputRequired
 
 class MoodButtons(Form):
     anger = SubmitField('Angry')
@@ -13,4 +13,4 @@ class MoodText(Form):
 
 class PlaylistButton(Form):
 	playlist = SubmitField("make playlist")
-	name = TextField("playlist name", [validators.InputRequired()])
+	name = TextField("playlist name", [InputRequired()])
