@@ -12,7 +12,6 @@ import numpy as np
 from operator import itemgetter
 from forms import *
 
-
 def kullback_leibler(start_dist, end_dist):
     """
     Assumes start_dist, end_dist are NumPy arrays.
@@ -25,7 +24,6 @@ def kullback_leibler(start_dist, end_dist):
         if e == np.nan:
             kl_vec[i] = 0
     return np.sum(kl_vec)
-
 
 def getAllTracks(sp):
     """
@@ -52,7 +50,6 @@ def getAllTracks(sp):
 
     return tracks
 
-
 def create_playlist(sp, list_of_uris, user, playlist_name):
     """
     Given a list of Spotify URIs and a desired playlist name, add all the songs
@@ -72,7 +69,6 @@ def generateRandomString(length):
         text += possible[int(math.floor(random.random() * len(possible)))]
 
     return text
-
 
 # global variables
 PORT_NUMBER = int(os.environ.get('PORT', 8888))
@@ -101,11 +97,8 @@ app.config.update(
     DEBUG=True,
 )
 
-
 # controllers
 @app.route('/', methods=['GET', 'POST'])
-
-
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     auth_url = sp_oauth.get_authorize_url()
@@ -139,20 +132,14 @@ def mood():
         else: 
             mood  = [0, 0, 0, 1, 0]
         session['mood'] = mood
-        return redirect(url_for('logic'))
+        return redirect(url_for('results'))
     elif request.method == 'POST' and form_b.validate():
         mood = tone.get_emotions(form_b.text.data)
         session['mood'] = mood
         return redirect(url_for('logic'))
     return render_template("mood.html", form_a = form_a, form_b = form_b)
 
-
-@app.route('/landing')
-def landing():
-    return render_template("index.html")
-
-
-@app.route('/logic')
+@app.route('/results', methods=['GET', 'POST'])
 def logic():
     """
     Gets the first 20 saved songs from the user's Spotify library.
@@ -229,13 +216,6 @@ def logic():
     for track in result_tracks['tracks']:
         desired_songs_uris.append(track['uri'][14:])
 
-    session['desired_songs_uris'] = desired_songs_uris
-    session['result_tracks'] = result_tracks
-
-    return redirect(url_for('result'))
-
-@app.route('/result',  methods=['GET', 'POST'])
-def result():
     form = PlaylistButton(request.form)
     result_tracks = session['result_tracks']
 
