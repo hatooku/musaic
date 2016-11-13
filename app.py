@@ -120,9 +120,14 @@ def callback():
 
 @app.route('/mood',  methods=['GET', 'POST'])
 def mood():
-    buttons_form = MoodButtons(request.form)
-    text_form = MoodText(request.form)
-    if buttons_form.is_submitted():
+    buttons_form = MoodButtons()
+    text_form = MoodText()
+    if text_form.startButton.data:
+        if text_form.validate_on_submit():
+            mood = tone.get_emotions(text_form.text.data)
+            session['mood'] = mood
+            return redirect(url_for('results'))
+    elif buttons_form.validate_on_submit():
         mood = []
         if buttons_form.anger.data:
             print 'cuter'
@@ -131,10 +136,6 @@ def mood():
             mood  = [0, 1, 0, 0, 0]
         else: 
             mood  = [0, 0, 0, 1, 0]
-        session['mood'] = mood
-        return redirect(url_for('results'))
-    elif request.method == 'POST' and text_form.validate():
-        mood = tone.get_emotions(text_form.text.data)
         session['mood'] = mood
         return redirect(url_for('results'))
     return render_template("mood.html", buttons_form = buttons_form, text_form = text_form)
@@ -208,7 +209,7 @@ def results():
     for track in result_tracks['tracks']:
         desired_songs_uris.append(track['uri'][14:])
 
-    form = PlaylistButton(request.form)
+    form = PlaylistButton()
 
     if form.is_submitted() and form.validate():
         print "Making playlist..."
