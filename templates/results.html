@@ -6,18 +6,20 @@
 {% block content %}
 
 <div class="container">
-    <iframe src={{"https://embed.spotify.com/?uri=spotify:trackset:" + uris}} width="400" height="900" frameborder="0" allowtransparency="true"></iframe>
+    <iframe src={{"https://embed.spotify.com/?uri=spotify:trackset:" + uris}} width="400" height="500" frameborder="0" allowtransparency="true"></iframe>
 
     <div class="playlist_form">
-        <div class="sentence">
-            Enjoy your new playlist!
+        <div class="description">
+            Enjoy your new custom playlist!
+            <br>
+            You can also add it to your library below.
         </div>
         <form action="" method="post" name="playlist" class="center">
             {{ form.csrf_token }}
-            <div class="center btn_font">
-                {{form.name(class_="form-control")}}
+            <div class="btn_font name_margin left">
+                {{form.name(class_="form-control", placeholder="Playlist Name")}}
             </div>
-            <div class="center btn_font">
+            <div class="btn_font name_margin right">
                 {{form.playlist(class_="btn btn-success")}}
             </div>
         </form>
