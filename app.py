@@ -223,6 +223,9 @@ def results():
     return render_template("results.html", uris = trackset_str, form=form)
 
 
+@app.route('/end')
+def end():
+    return render_template("end.html")
 # launch the app
 if __name__ == '__main__':
     app.secret_key = generateRandomString(16)
