@@ -8,7 +8,7 @@ class MoodButtons(Form):
     sadness = SubmitField('Sad')
 
 class MoodText(Form):
-    text = TextAreaField('Mood')
+    text = TextAreaField('Mood', [InputRequired()])
     startButton = SubmitField("Submit")
 
 class PlaylistButton(Form):
