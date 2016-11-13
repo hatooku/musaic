@@ -51,14 +51,6 @@
     font-family: "Raleway", sans-serif;
 }
 
-label {
-    font-family: "Raleway", sans-serif;
-    font-size: 20px;
-    font-weight: 300;
-    color: white;
-    margin: 20px auto;
-}
-
 .form-control {
     width: 70%;
     height: 100px;
