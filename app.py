@@ -140,7 +140,7 @@ def mood():
     return render_template("mood.html", form_a = form_a, form_b = form_b)
 
 @app.route('/results', methods=['GET', 'POST'])
-def logic():
+def results():
     """
     Gets the first 20 saved songs from the user's Spotify library.
     Performs tone analysis on the songs and picks the scores which
@@ -230,7 +230,9 @@ def logic():
         playlist_name = 'My personalized playlist'
         create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
 
-    return render_template("results.html")
+    trackset_str = ','.join(e for e in desired_songs_uris)
+
+    return render_template("results.html", x = trackset_str)
 
 
 # launch the app
