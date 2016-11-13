@@ -7,28 +7,32 @@
     <div class="container">
         <div class="center">
             <div class="question">How are you feeling today?</div>
-            <hr class="style-seven">
-            <form action="" method="post" name="mood" class="center">
-                <div class="center btn_font">
-                    <span>
-                        {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin")}}
-                    </span>
-                    <span>
-                        {{buttons_form.sadness(class_="btn btn-info btn-lg extra-side-margin")}}
-                    </span>
-                    <span>
-                        {{buttons_form.joy(class_="btn btn-success btn-lg extra-side-margin")}}
-                    </span>
-                </div>
-                <div>
-                    <div>
-                        {{text_form.text(class_="form-control center", id="comment", placeholder="If none of the buttons describe how you feel, write about it here!")}}
+                <hr class="style-seven">
+                <form action="" method="post" name="btns_form" class="center">
+                    {{ buttons_form.csrf_token }}
+                    <div class="center btn_font">
+                        <span>
+                            {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin")}}
+                        </span>
+                        <span>
+                            {{buttons_form.sadness(class_="btn btn-info btn-lg extra-side-margin")}}
+                        </span>
+                        <span>
+                            {{buttons_form.joy(class_="btn btn-success btn-lg extra-side-margin")}}
+                        </span>
                     </div>
+                </form>
+                <form action="" method="post" name="txt_form" class="center">
+                    {{ text_form.csrf_token }}
                     <div>
-                        {{text_form.startButton(class_="btn btn-warning btn_font")}}
+                        <div>
+                            {{text_form.text(class_="form-control center", id="comment", placeholder="If none of the buttons describe how you feel, write about it here!")}}
+                        </div>
+                        <div>
+                            {{text_form.startButton(class_="btn btn-warning btn_font")}}
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
             </div>
         </div>
     </div>
