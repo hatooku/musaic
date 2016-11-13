@@ -1,10 +1,23 @@
-{%extends "base.html" %}
+{% extends "base.html" %}
 {% block css %}
 <link rel="stylesheet" href={{ url_for('static', filename='mood.css') }}>
 {% endblock %}
 
+{% block js %}
+{% endblock %}
+
 {% block content %}
-    <div class="container">
+<script type="text/javascript">// <![CDATA[
+        function preloader(){
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("content").style.display = "none";
+            console.log('hello')
+        } //preloader
+// ]]></script>
+    
+    <img style="display:none;" src={{ url_for('static', filename='default.gif') }} id="loading">
+
+    <div class="container" id="content">
         <div class="center">
             <div class="question">How are you feeling today?</div>
                 <hr class="style-seven">
@@ -12,7 +25,8 @@
                     {{ buttons_form.csrf_token }}
                     <div class="center btn_font">
                         <span>
-                            {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin")}}
+                            {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin",
+                                                 onclick="preloader()")}}
                         </span>
                         <span>
                             {{buttons_form.sadness(class_="btn btn-info btn-lg extra-side-margin")}}

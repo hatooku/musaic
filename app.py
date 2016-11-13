@@ -140,6 +140,7 @@ def mood():
         return redirect(url_for('results'))
     return render_template("mood.html", buttons_form = buttons_form, text_form = text_form)
 
+
 @app.route('/results', methods=['GET', 'POST'])
 def results():
     """
