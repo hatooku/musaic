@@ -133,11 +133,11 @@ def mood():
             mood  = [0, 0, 0, 1, 0]
         session['mood'] = mood
         return redirect(url_for('results'))
-    elif request.method == 'POST' and form_b.validate():
-        mood = tone.get_emotions(form_b.text.data)
+    elif request.method == 'POST' and text_form.validate():
+        mood = tone.get_emotions(text_form.text.data)
         session['mood'] = mood
         return redirect(url_for('results'))
-    return render_template("mood.html", form_a = form_a, form_b = form_b)
+    return render_template("mood.html", buttons_form = buttons_form, text_form = text_form)
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
