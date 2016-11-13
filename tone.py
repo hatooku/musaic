@@ -34,8 +34,9 @@ def get_emotions(lyrics):
     data = [0.0 for _ in range(5)]
     for tone_data in tones:
         data[EMOTION_IDX[str(tone_data['tone_id'])]] = tone_data['score']
-        
+
     return data
+
 
 def get_all_emotions(songs_arr):
     """Computes the emotions for the given array of songs in parallel.

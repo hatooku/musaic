@@ -26,6 +26,7 @@ def kullback_leibler(start_dist, end_dist):
             kl_vec[i] = 0
     return np.sum(kl_vec)
 
+
 def getAllTracks(sp):
     """
     Pulls all saved songs from user library, 50 at a time (Spotify rate limit).
@@ -60,6 +61,7 @@ def getAllTracks(sp):
                     offset += SONGS_PER_TIME
         playlistoffset += SONGS_PER_TIME_P
     return final_tracks
+
 
 def create_playlist(sp, list_of_uris, user, playlist_name):
     """
@@ -141,7 +143,6 @@ def mood():
     elif buttons_form.validate_on_submit():
         mood = []
         if buttons_form.anger.data:
-            print 'cuter'
             mood  = [1, 0, 0, 0, 0]
         elif buttons_form.joy.data:
             mood  = [0, 1, 0, 0, 0]
@@ -149,6 +150,14 @@ def mood():
             mood  = [0, 0, 0, 1, 0]
         session['mood'] = mood
         return redirect(url_for('results'))
+    elif request.method == 'POST' and text_form.validate():
+        mood = tone.get_emotions(text_form.text.data)
+        session['mood'] = mood
+        print text_form.text.data
+        print mood  # FIX DEBUG
+        print mood == True
+        return redirect(url_for('results'))
+
     return render_template("mood.html", buttons_form = buttons_form, text_form = text_form)
 
 @app.route('/results', methods=['GET', 'POST'])
@@ -165,11 +174,23 @@ def results():
     desired encoding. Then for the top N songs we get a list of the URIs, and
     (song name, artist) tuples.
     """
+
     if "TOKEN" not in session:
         return redirect(url_for('index'))
+
     token = session["TOKEN"]
     access_token = token["access_token"]
+    form = PlaylistButton()
     sp = spotipy.Spotify(auth=access_token)
+
+    if form.validate_on_submit():
+        print "Making playlist..."
+        user = sp.current_user()['id']
+        playlist_name = form.name.data
+        desired_songs_uris = session["trackset_str"].split(',')
+        create_playlist(sp, desired_songs_uris, user, playlist_name)
+
+        return "YAY!"
 
     EMOTION_IDX = {
         "anger" : 0,
@@ -189,12 +210,15 @@ def results():
         # random.shuffle(our_tracks)
         our_tracks = our_tracks[0:100]
 
-    # get the lyrics for all songs
-    song_lyrics = []
-    for song in our_tracks:
-        lyrics = Lyrics.get_lyrics(song[0], song[1])
-        if lyrics != '':
-            song_lyrics.append((song[2], lyrics))
+    # get the lyrics for all songs (sequentially)
+    # song_lyrics = []
+    # for song in our_tracks:
+    #     lyrics = Lyrics.get_lyrics(song[0], song[1])
+    #     if lyrics != '':
+    #         song_lyrics.append((song[2], lyrics))
+
+    # get the lyrics for all songs (parallelized)
+    song_lyrics = Lyrics.get_all_lyrics(our_tracks)
 
     # get the emotion scores of all songs
     emotion_by_song = tone.get_all_emotions(song_lyrics)
@@ -210,7 +234,7 @@ def results():
 
     # get the top N results
     results = []
-    #result_info = []
+    # result_info = []
     for i in range(min(NUM_SONGS, len(song_rankings))):
         results.append(song_rankings[i][0])
 
@@ -220,17 +244,12 @@ def results():
     for track in result_tracks['tracks']:
         desired_songs_uris.append(track['uri'][14:])
 
-    form = PlaylistButton()
-
-    if form.is_submitted() and form.validate():
-        print "Making playlist..."
-        user = sp.current_user()
-        playlist_name = form.name.data
-        create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
-
     trackset_str = ','.join(e for e in desired_songs_uris)
 
-    return render_template("results.html", x = trackset_str, form=form)
+    session["trackset_str"] = trackset_str
+
+
+    return render_template("results.html", uris = trackset_str, form=form)
 
 
 # launch the app
