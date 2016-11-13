@@ -145,10 +145,10 @@ def getMood():
         return redirect('/logic')
     return render_template("mood.html")
 
+
 @app.route('/landing')
 def landing():
     return render_template("index.html")
-
 
 
 @app.route('/logic')
@@ -224,62 +224,35 @@ def logic():
 
     result_tracks = sp.tracks(results)
 
-    for i in result_tracks['tracks']:
-        # print i.keys()
-        print i['uri'][12:]
-        print '\n'
+    desired_songs_uris = []
+    for track in result_tracks['tracks']:
+        desired_songs_uris.append(track['uri'][14:])
 
+    session['desired_songs_uris'] = desired_songs_uris
     session['result_tracks'] = result_tracks
-   
+
     return redirect(url_for('result'))
-
-    # if code:
-    #     token = sp_oauth.get_access_token(code)
-    #     session["TOKEN"] = token
-    # token = sp_oauth.get_access_token(code)
-
-    # auth_url = sp_oauth.get_authorize_url()
-    # return render_template("index.html", auth_url=auth_url)
 
 @app.route('/result')
 def results():
     form = PlaylistButton(request.form)
     result_tracks = session['result_tracks']
-    # print song_rankings
-    # print result_tracks['tracks']
-    # get names and artists of those songs
-    for track in result_tracks['tracks']:
-        # track = result['track']
-        result_info.append((track['name'], track['artists'][0]['name']))
 
-    # print result_info
+    # get names and artists of those songs -> result_info
+    for track in result_tracks['tracks']:
+        result_info.append((track['name'], track['artists'][0]['name']))
+    # print result_info later???
+
     if form.is_submitted():
-        print "making playlist"
+        print "Making playlist..."
         user = "caltechcalhacks"
-        playlist_name = 'testing'
-        list_of_uris = ["3VvBPkc24zC7x05mgJTyGO"]
-        create_playlist(sp, list_of_uris, user, playlist_name)
+        playlist_name = 'My personalized playlist'
+        create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
 
     return render_template("results.html")
 
-    # print result_tracks['tracks']
-    # get names and artists of those songs
-    for track in result_tracks['tracks']:
-        # track = result['track']
-        result_info.append((track['name'], track['artists'][0]['name']))
 
-    # print result_info
-
-    user = "caltechcalhacks"
-    playlist_name = 'testing'
-    list_of_uris = ["3VvBPkc24zC7x05mgJTyGO"]
-    create_playlist(sp, list_of_uris, user, playlist_name)
-
-    return redirect(url_for('landing'))
-
-
-
-# launch
+# launch the app
 if __name__ == '__main__':
     app.secret_key = generateRandomString(16)
     app.run(host='0.0.0.0', port=PORT_NUMBER, debug=True)
