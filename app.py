@@ -136,6 +136,9 @@ def mood():
     elif request.method == 'POST' and text_form.validate():
         mood = tone.get_emotions(text_form.text.data)
         session['mood'] = mood
+        print text_form.text.data
+        print mood  # FIX DEBUG
+        print mood == True
         return redirect(url_for('results'))
     return render_template("mood.html", buttons_form = buttons_form, text_form = text_form)
 
