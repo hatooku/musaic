@@ -217,11 +217,16 @@ def logic():
         desired_songs_uris.append(track['uri'][14:])
 
     form = PlaylistButton(request.form)
-    result_tracks = session['result_tracks']
+    # result_tracks = session['result_tracks']
 
     # get names and artists of those songs -> result_info
+<<<<<<< HEAD
+    # for track in result_tracks['tracks']:
+    #     result_info.append((track['name'], track['artists'][0]['name']))
+=======
     #for track in result_tracks['tracks']:
     #    result_info.append((track['name'], track['artists'][0]['name']))
+>>>>>>> 4454662010cab47bb5d46961ae12668e2ce5ac90
     # print result_info later???
 
     if form.is_submitted():
