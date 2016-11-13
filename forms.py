@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 class MoodButtons(Form):
     anger = SubmitField('Angry')
-    joy = SubmitField('Hapy')
+    joy = SubmitField('Happy')
     sadness = SubmitField('Sad')
 
 class MoodText(Form):
