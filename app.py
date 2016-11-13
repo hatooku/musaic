@@ -120,13 +120,13 @@ def callback():
     if code and state == STATE:
         token = sp_oauth.get_access_token(code)
         session["TOKEN"] = token
-        return redirect(url_for('logic'))
+        return redirect(url_for('mood'))
     else:
         return 'gg'
 
 
 @app.route('/mood',  methods=['GET', 'POST'])
-def getMood():
+def mood():
     form_a = MoodButtons(request.form)
     form_b = MoodText(request.form)
     if form_a.is_submitted():
