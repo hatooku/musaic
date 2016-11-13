@@ -63,7 +63,27 @@
     margin: 20px auto 30px auto;
 }
 
-div#loading {
-    width: 100%;
-    margin: 0 auto;
+.loading {
+    display: block;
+    margin: 5px auto 5px auto;
+    text-align: center;
 }
+
+.loading_div {
+    display: block;
+    margin-top: 15%;
+    text-align: center;
+}
+
+.loading_label {
+    color: white;
+    font-family: "Raleway", sans-serif;
+    font-size: 40px;
+    font-weight: 500;
+    text-align: center;
+}
+
+#loading {
+    display: none;
+}
+
