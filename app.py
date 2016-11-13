@@ -120,30 +120,31 @@ def callback():
     if code and state == STATE:
         token = sp_oauth.get_access_token(code)
         session["TOKEN"] = token
-        return redirect('/logic')
+        return redirect(url_for('/logic'))
     else:
         return 'gg'
 
 
-@app.route('/mood')
+@app.route('/mood',  methods=['GET', 'POST'])
 def getMood():
     form_a = MoodButtons(request.form)
     form_b = MoodText(request.form)
     if form_a.is_submitted():
         mood = []
         if form_a.anger.data:
+            print 'cuter'
             mood  = [1, 0, 0, 0, 0]
         elif form_a.joy.data:
             mood  = [0, 1, 0, 0, 0]
         else: 
             mood  = [0, 0, 0, 1, 0]
         session['mood'] = mood
-        return redirect('/logic')
+        return redirect(url_for('/logic'))
     elif request.method == 'POST' and form_b.validate():
         mood = []
         session['mood'] = mood
-        return redirect('/logic')
-    return render_template("mood.html", form = form_a)
+        return redirect(url_for('/logic'))
+    return render_template("mood.html", form_a = form_a, form_b = form_b)
 
 
 @app.route('/landing')
@@ -233,7 +234,7 @@ def logic():
 
     return redirect(url_for('result'))
 
-@app.route('/result')
+@app.route('/result',  methods=['GET', 'POST'])
 def results():
     form = PlaylistButton(request.form)
     result_tracks = session['result_tracks']

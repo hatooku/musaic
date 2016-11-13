@@ -1,0 +1,20 @@
+{%extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" href={{ url_for('static', filename='index.css') }}>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="description">
+            <div class="subheader">How are you feeling today?</div>
+            <hr class="style-seven">
+             <form  action="" method="post" name="mood">
+                    {{ form.hidden_tag() }}
+                    <div class="text-center"> {{form.anger}}</div>
+                    <div class="text-center"> {{form.joy}}</div>
+                    <div class="text-center"> {{form.sadness}}</div>
+             </form>
+        </div>
+    </div>
+{% endblock %}
+
