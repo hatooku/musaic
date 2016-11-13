@@ -11,6 +11,7 @@ import tone as tone
 import numpy as np
 from operator import itemgetter
 from forms import *
+from collections import Set
 
 def kullback_leibler(start_dist, end_dist):
     """
@@ -29,26 +30,36 @@ def getAllTracks(sp):
     """
     Pulls all saved songs from user library, 50 at a time (Spotify rate limit).
     """
-    tracks = []
+    final_tracks = set()
+    username = sp.current_user()['id']
 
     SONGS_PER_TIME = 50  # number of songs to request from Spotify API.
     offset = 0  # index to start song requests
+    playlistoffset = 0
+    SONGS_PER_TIME_P = 100
 
+    done = False
     while True:
-        SPTracks = sp.current_user_saved_tracks(limit=SONGS_PER_TIME,
-                                                offset=offset)
+        SPPlaylists = sp.user_playlists(username, limit = SONGS_PER_TIME, offset = offset)
 
-        if len(SPTracks["items"]) == 0:
+        if len(SPPlaylists["items"]) == 0:
             break
-
-        for song in SPTracks["items"]:
-            track = song["track"]
-            song_item = (track["name"], track["artists"][0]["name"], track["uri"])
-            tracks.append(song_item)
-
-        offset += SONGS_PER_TIME
-
-    return tracks
+        for playlist in SPPlaylists["items"]:
+                while not done:
+                    results = sp.user_playlist_tracks(username, playlist['id'], \
+                        limit = SONGS_PER_TIME_P, offset = playlistoffset)
+                    
+                    for result in results['items']:
+                        track = result["track"]
+                        data = (track['name'], track['artists'][0]['name'], track['uri'])
+                        final_tracks.add(data)
+                    
+                    if len(results) <= SONGS_PER_TIME_P:
+                        done = True
+                    
+                    offset += SONGS_PER_TIME
+        playlistoffset += SONGS_PER_TIME_P
+    return final_tracks
 
 def create_playlist(sp, list_of_uris, user, playlist_name):
     """
