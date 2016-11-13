@@ -1,0 +1,18 @@
+{%extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" href={{ url_for('static', filename='index.css') }}>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="description">
+            <div class="subheader">Looking for some tunes to suit your moods?</div>
+
+            <div class="paragraph">Tell us how you're feeling, we'll pull a curated selection of songs from your Spotify library, and you can listen to the generated playlist right here :) </div>
+            <hr class="style-seven">
+            <a href={{ auth_url }}>
+                <button type="button" class="btn btn-success loginbtn"><i class="fa fa-spotify" aria-hidden="true"></i>     Login with Spotify</button>
+            </a>
+        </div>
+    </div>
+{% endblock %}
