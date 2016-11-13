@@ -16,6 +16,26 @@ iframe {
 
 .playlist_form {
     position: absolute;
+<<<<<<< HEAD
+    right: 23%;
+    top: 25%;
+}
+
+div#content {
+    display: none;
+    }
+ 
+div#loading {
+    top: 200 px;
+    margin: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 160px;
+    height: 24px;
+    background: url(default.gif) no-repeat;
+    cursor: wait;
+    }
+=======
     right: 18%;
     top: 26%;
 }
@@ -33,3 +53,4 @@ iframe {
     float: right;
     width: 30%;
 }
+>>>>>>> 5606ac864fe5c3483880c571769af672f145244c
