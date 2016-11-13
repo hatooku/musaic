@@ -1,7 +1,7 @@
 iframe {
     position: absolute;
     left: 15%;
-    top: 25%;
+    top: 22%;
 }
 
 
@@ -16,6 +16,20 @@ iframe {
 
 .playlist_form {
     position: absolute;
-    right: 23%;
-    top: 25%;
+    right: 18%;
+    top: 26%;
+}
+
+.name_margin {
+    margin: 40px 5px 0px 5px;
+}
+
+.left {
+    float: left;
+    width: 65%;
+}
+
+.right {
+    float: right;
+    width: 30%;
 }

@@ -31,15 +31,16 @@
     margin-top: 3%;
     font-family: "Raleway", sans-serif;
     font-size: 20px;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .question {
     color: white;
     font-family: "Raleway", sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    margin-top: 20%;
+    font-size: 40px;
+    font-weight: 400;
+    margin-top: 18%;
+    margin-bottom: 2%;
     text-align: center;
 }
 
