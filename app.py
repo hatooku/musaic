@@ -25,6 +25,7 @@ def kullback_leibler(start_dist, end_dist):
             kl_vec[i] = 0
     return np.sum(kl_vec)
 
+
 def getAllTracks(sp):
     """
     Pulls all saved songs from user library, 50 at a time (Spotify rate limit).
@@ -49,6 +50,7 @@ def getAllTracks(sp):
         offset += SONGS_PER_TIME
 
     return tracks
+
 
 def create_playlist(sp, list_of_uris, user, playlist_name):
     """
