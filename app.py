@@ -120,7 +120,7 @@ def callback():
     if code and state == STATE:
         token = sp_oauth.get_access_token(code)
         session["TOKEN"] = token
-        return redirect('/mood')
+        return redirect('/logic')
     else:
         return 'gg'
 
@@ -181,7 +181,8 @@ def logic():
     # user_mood = np.array([0] * 5)
     # mood = 'sadness'
     # user_mood[EMOTION_IDX[mood]] = 1
-    user_mood = session['mood']
+    # user_mood = session['mood']
+    user_mood = np.array([0, 1, 0, 0, 0])
 
     # get all songs
     our_tracks = getAllTracks(sp)
@@ -223,7 +224,10 @@ def logic():
 
     result_tracks = sp.tracks(results)
 
-    # print result_tracks['tracks']
+    for i in result_tracks['tracks']:
+        # print i.keys()
+        print i['uri'][12:]
+        print '\n'
     # get names and artists of those songs
     for track in result_tracks['tracks']:
         # track = result['track']
