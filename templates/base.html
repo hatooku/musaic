@@ -1,57 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    {% block head %}
-    <title>SuperApp{% block title %}{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <meta charset="utf-8">
+<html>
 
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.ico') }}">
-    {% endblock %}
-  </head>
-  <body>
-    {% block navbar %}
-    <div class="navbar navbar-static-top navbar-default">
-      <div class="container">
-        <button class="navbar-toggle">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/">SuperApp</a>
-        <div class="nav-collapse">
-          {% block navbar_right %}
-          <ul class="nav navbar-nav pull-right">
-            {% if not session.logged_in %}
-              <li><a href="#">Login or Signup</a></li>
-            {% else %}
-              <li><a href="#">Logout</a></li>
-            {% endif %}
-          </ul>
-          {% endblock %}
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-    {% endblock %}
-    <div class="container page">
-        <div class="content">
-          {% block content %}
-          {% endblock %}
-        </div>
-        <hr>
-        {% block footer %}
-        <footer class="footer">
-            <p>&copy; SuperApp</p>
-        </footer>
-        {% endblock %}
-    </div>
-    {% block js_footer %}
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    {% endblock %}
-  </body>
+    <head>
+        <title>Title</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+
+        <link href='https://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,700" rel="stylesheet">
+        <link rel="stylesheet" href={{ url_for('static', filename='base.css') }}>
+        {% block css %}{% endblock %}
+        <script src="https://use.fontawesome.com/f3dfadf1d8.js"></script>
+    </head>
+
+    <body>
+        <img src={{ url_for('static', filename='background.jpg') }} class="bg">
+        <div class="overlay"></div>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a class="navbar-brand title" href={{ url_for('index') }}>MusicApp</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav float-xs-right">
+                        <li>
+                            <a class="page-scroll" href="https://github.com/hatooku/calhacks">
+                                <i class="fa fa-github" style="color:white; font-size: 40px;" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+    </body>
 </html>

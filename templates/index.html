@@ -1,54 +1,18 @@
-<!DOCTYPE html>
-<html>
+{%extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" href={{ url_for('static', filename='index.css') }}>
+{% endblock %}
 
-    <head>
-        <title>Title</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+{% block content %}
+    <div class="container">
+        <div class="description">
+            <div class="subheader">Lorem ipsum dolor sit amet</div>
 
-        <link href='https://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,700" rel="stylesheet">
-        <link rel="stylesheet" href={{ url_for('static', filename='index.css') }}>
-        <script src="https://use.fontawesome.com/f3dfadf1d8.js"></script>
-    </head>
-
-    <body>
-        <img src={{ url_for('static', filename='background.jpg') }} class="bg">
-        <div class="overlay"></div>
-
-
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <a class="navbar-brand title" href={{ url_for('index') }}>MusicApp</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="navbar-collapse">
-                    <ul class="nav navbar-nav float-xs-right">
-                        <li>
-                            <a class="page-scroll" href="https://github.com/hatooku/calhacks">
-                                <i class="fa fa-github" style="color:white; font-size: 40px;" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container">
-            <div class="description">
-                <div class="subheader">Lorem ipsum dolor sit amet</div>
-
-                <div class="paragraph">Duis a augue a risus tempor ultrices in id orci. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tempus vitae lorem in posuere. Suspendisse in ultrices odio. </div>
-                <hr class="style-seven">
-                <a href={{ auth_url }}>
-                    <button type="button" class="btn btn-success loginbtn"><i class="fa fa-spotify" aria-hidden="true"></i>     Login with Spotify</button>
-                </a>
-            </div>
+            <div class="paragraph">Duis a augue a risus tempor ultrices in id orci. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tempus vitae lorem in posuere. Suspendisse in ultrices odio. </div>
+            <hr class="style-seven">
+            <a href={{ auth_url }}>
+                <button type="button" class="btn btn-success loginbtn"><i class="fa fa-spotify" aria-hidden="true"></i>     Login with Spotify</button>
+            </a>
         </div>
-
-
-
-    </body>
-</html>
+    </div>
+{% endblock %}
