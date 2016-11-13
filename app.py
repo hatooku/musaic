@@ -141,7 +141,7 @@ def mood():
         session['mood'] = mood
         return redirect(url_for('logic'))
     elif request.method == 'POST' and form_b.validate():
-        mood = []
+        mood = tone.get_emotions(form_b.text.data)
         session['mood'] = mood
         return redirect(url_for('logic'))
     return render_template("mood.html", form_a = form_a, form_b = form_b)
