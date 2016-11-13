@@ -21,7 +21,7 @@ def get_emotions(lyrics):
     """Returns the emotions contained in the lyrics.
 
     Args:
-        lyrics (tuple): the lyrics to be analyzed
+        lyrics (string): the lyrics to be analyzed
 
     Returns:
         data (dict): Valid keys are 'anger', 'joy', 'fear', 'sadness', 'disgust'
