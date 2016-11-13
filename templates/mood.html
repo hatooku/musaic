@@ -11,11 +11,11 @@
         console.log('hello')
     }
 </script>
-    <div class="loading">
+    <div class="loading_div" id="loading">
         <div class="loading_label">Loading...</div>
-        <img src={{ url_for('static', filename='default.gif') }} id="loading">
+        <img src={{ url_for('static', filename='preloader.svg') }} class="loading">
     </div>
-    <div style="display:none;" class="container" id="content">
+    <div class="container" id="content">
         <div class="center">
             <div class="question">How are you feeling today?</div>
                 <hr class="style-seven">
@@ -23,14 +23,13 @@
                     {{ buttons_form.csrf_token }}
                     <div class="center btn_font">
                         <span>
-                            {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin",
-                                                 onclick="preloader()")}}
+                            {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin", onclick="preloader()")}}
                         </span>
                         <span>
-                            {{buttons_form.sadness(class_="btn btn-info btn-lg extra-side-margin")}}
+                            {{buttons_form.sadness(class_="btn btn-info btn-lg extra-side-margin", onclick="preloader()")}}
                         </span>
                         <span>
-                            {{buttons_form.joy(class_="btn btn-success btn-lg extra-side-margin")}}
+                            {{buttons_form.joy(class_="btn btn-success btn-lg extra-side-margin", onclick="preloader()")}}
                         </span>
                     </div>
                 </form>
@@ -41,7 +40,7 @@
                             {{text_form.text(class_="form-control center", id="comment", placeholder="If none of the buttons describe how you feel, write about it here!")}}
                         </div>
                         <div>
-                            {{text_form.startButton(class_="btn btn-warning btn_font")}}
+                            {{text_form.startButton(class_="btn btn-warning btn_font", onclick="preloader()")}}
                         </div>
                     </div>
                 </form>
