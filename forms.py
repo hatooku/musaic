@@ -13,4 +13,4 @@ class MoodText(Form):
 
 class PlaylistButton(Form):
 	playlist = SubmitField("make playlist")
-	name = TextField("playlist name", [validators.InputRequired()]) please")
+	name = TextField("playlist name", [validators.InputRequired()])
