@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% block css %}
-<link rel="stylesheet" href={{ url_for('static', filename='base.css') }}>
 <link rel="stylesheet" href={{ url_for('static', filename='end.css') }}>
-{% endblock %}
-
-{% block js %}
 {% endblock %}
 
 {% block content %}
 <div class=center>
 	<div class=subheader> 
 	Your playlist has been created!
-	<div class = button> </div>
+    <div>
+    <a href={{ url_for('index') }}>
+	   <button type="button" class="btn btn-success loginbtn">Start over</button>
+    </a>
+    </div>
 	</div>
 </div>>
 {%endblock %}
