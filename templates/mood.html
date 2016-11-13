@@ -3,21 +3,19 @@
 <link rel="stylesheet" href={{ url_for('static', filename='mood.css') }}>
 {% endblock %}
 
-{% block js %}
-{% endblock %}
-
 {% block content %}
-<script type="text/javascript">// <![CDATA[
-        function preloader(){
-            document.getElementById("loading").style.display = "block";
-            document.getElementById("content").style.display = "none";
-            console.log('hello')
-        } //preloader
-// ]]></script>
-    
-    <img style="display:none;" src={{ url_for('static', filename='default.gif') }} id="loading">
-
-    <div class="container" id="content">
+<script type="text/javascript">
+    function preloader(){
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("content").style.display = "none";
+        console.log('hello')
+    }
+</script>
+    <div class="loading">
+        <div class="loading_label">Loading...</div>
+        <img src={{ url_for('static', filename='default.gif') }} id="loading">
+    </div>
+    <div style="display:none;" class="container" id="content">
         <div class="center">
             <div class="question">How are you feeling today?</div>
                 <hr class="style-seven">
