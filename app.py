@@ -206,7 +206,7 @@ def logic():
 
     # get the top N results
     results = []
-    result_info = []
+    #result_info = []
     for i in range(min(NUM_SONGS, len(song_rankings))):
         results.append(song_rankings[i][0])
 
@@ -220,8 +220,8 @@ def logic():
     result_tracks = session['result_tracks']
 
     # get names and artists of those songs -> result_info
-    for track in result_tracks['tracks']:
-        result_info.append((track['name'], track['artists'][0]['name']))
+    #for track in result_tracks['tracks']:
+    #    result_info.append((track['name'], track['artists'][0]['name']))
     # print result_info later???
 
     if form.is_submitted():
