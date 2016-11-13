@@ -19,3 +19,18 @@ iframe {
     right: 23%;
     top: 25%;
 }
+
+div#content {
+    display: none;
+    }
+ 
+div#loading {
+    top: 200 px;
+    margin: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 160px;
+    height: 24px;
+    background: url(default.gif) no-repeat;
+    cursor: wait;
+    }
