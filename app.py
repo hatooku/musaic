@@ -230,7 +230,9 @@ def results():
         playlist_name = 'My personalized playlist'
         create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
 
-    return render_template("results.html")
+    trackset_str = ','.join(e for e in desired_songs_uris)
+
+    return render_template("results.html", x = trackset_str)
 
 
 # launch the app
