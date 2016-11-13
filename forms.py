@@ -14,5 +14,5 @@ class MoodButtons(Form):
 #     test = StringField('Username')
 #     startButton = SubmitField("That's how I'm feeling baby")
 
-# class GoButton(Form):
-#     go = SubmitField("Let met log into spotify")
+#class PlaylistButton(Form):
+#	make = SubmitField("That sounds dank. I'll order 1 playlist of that please")
