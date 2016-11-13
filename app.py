@@ -120,14 +120,14 @@ def callback():
 
 @app.route('/mood',  methods=['GET', 'POST'])
 def mood():
-    form_a = MoodButtons(request.form)
-    form_b = MoodText(request.form)
-    if form_a.is_submitted():
+    buttons_form = MoodButtons(request.form)
+    text_form = MoodText(request.form)
+    if buttons_form.is_submitted():
         mood = []
-        if form_a.anger.data:
+        if buttons_form.anger.data:
             print 'cuter'
             mood  = [1, 0, 0, 0, 0]
-        elif form_a.joy.data:
+        elif buttons_form.joy.data:
             mood  = [0, 1, 0, 0, 0]
         else: 
             mood  = [0, 0, 0, 1, 0]
@@ -140,7 +140,7 @@ def mood():
     return render_template("mood.html", form_a = form_a, form_b = form_b)
 
 @app.route('/results', methods=['GET', 'POST'])
-def logic():
+def results():
     """
     Gets the first 20 saved songs from the user's Spotify library.
     Performs tone analysis on the songs and picks the scores which

@@ -1,0 +1,71 @@
+.btn-success {
+    border-color: #5cb85c;
+    background-color: #5cb85c;
+}
+
+
+.loginbtn {
+    font-family: "Raleway", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    border-radius:10px;
+    padding: 10px 20px 10px 20px;
+}
+
+.description {
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 15%;
+}
+
+.subheader {
+    font-family: "Raleway", sans-serif;
+    font-size: 45px;
+    font-weight: 700;
+    margin-top: 32%;
+}
+
+.paragraph {
+    margin-top: 3%;
+    font-family: "Raleway", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.question {
+    color: white;
+    font-family: "Raleway", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 20%;
+    text-align: center;
+}
+
+.extra-side-margin {
+    margin: 0px 50px 30px 50px;
+}
+
+.btn_font {
+    font-family: "Raleway", sans-serif;
+}
+
+label {
+    font-family: "Raleway", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    margin: 20px auto;
+}
+
+.form-control {
+    width: 70%;
+    height: 100px;
+    resize: none;
+    text-align: left;
+    font-family: "Raleway", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 20px auto 30px auto;
+}

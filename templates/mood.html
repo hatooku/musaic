@@ -1,21 +1,36 @@
 {%extends "base.html" %}
 {% block css %}
-<link rel="stylesheet" href={{ url_for('static', filename='index.css') }}>
+<link rel="stylesheet" href={{ url_for('static', filename='mood.css') }}>
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <div class="description">
-            <div class="subheader">How are you feeling today?</div>
+        <div class="center">
+            <div class="question">How are you feeling today?</div>
             <hr class="style-seven">
-             <form  action="" method="post" name="mood">
-                    
-                    <div class="text-center"> {{form_a.anger}}</div>
-                    <div class="text-center"> {{form_a.joy}}</div>
-                    <div class="text-center"> {{form_a.sadness}}</div>
-                    <div class="text-center"> {{form_b.test}}</div>
-                    <div class="text-center"> {{form_b.startButton}}</div>
-             </form>
+            <form action="" method="post" name="mood" class="center">
+                <div class="center btn_font">
+                    <span>
+                        {{buttons_form.anger(class_="btn btn-danger btn-lg extra-side-margin")}}
+                    </span>
+                    <span>
+                        {{buttons_form.sadness(class_="btn btn-info btn-lg extra-side-margin")}}
+                    </span>
+                    <span>
+                        {{buttons_form.joy(class_="btn btn-success btn-lg extra-side-margin")}}
+                    </span>
+                </div>
+                <div>
+                    <div>
+                        <label for="comment">Or... tell us about how you're feeling below!</label>
+                        {{text_form.text(class_="form-control center", id="comment")}}
+                    </div>
+                    <div>
+                        {{text_form.startButton(class_="btn btn-warning btn_font")}}
+                    </div>
+                </div>
+            </form>
+            </div>
         </div>
     </div>
 {% endblock %}
