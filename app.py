@@ -115,7 +115,7 @@ def callback():
         session["TOKEN"] = token
         return redirect(url_for('mood'))
     else:
-        return 'gg'
+        return redirect(url_for('index'))
 
 
 @app.route('/mood',  methods=['GET', 'POST'])
@@ -153,6 +153,8 @@ def results():
     desired encoding. Then for the top N songs we get a list of the URIs, and
     (song name, artist) tuples.
     """
+    if "TOKEN" not in session:
+        return redirect(url_for('index'))
     token = session["TOKEN"]
     access_token = token["access_token"]
     sp = spotipy.Spotify(auth=access_token)
