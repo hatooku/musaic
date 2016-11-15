@@ -55,8 +55,8 @@ def create_playlist(sp, list_of_uris, user, playlist_name):
     Given a list of Spotify URIs and a desired playlist name, add all the songs
     specified by the URIs to a new playlist.
     """
-    new_playlist = sp.user_playlist_create(user, playlist_name, public=True)['uri']
-    results = sp.user_playlist_add_tracks(user, new_playlist,
+    new_playlist = sp.user_playlist_create(user['id'], playlist_name, public=True)['uri']
+    results = sp.user_playlist_add_tracks(user['id'], new_playlist,
                                           list_of_uris, position=None)
     return results
 
@@ -130,7 +130,6 @@ def mood():
     elif buttons_form.validate_on_submit():
         mood = []
         if buttons_form.anger.data:
-            print 'cuter'
             mood  = [1, 0, 0, 0, 0]
         elif buttons_form.joy.data:
             mood  = [0, 1, 0, 0, 0]
@@ -160,6 +159,15 @@ def results():
     token = session["TOKEN"]
     access_token = token["access_token"]
     sp = spotipy.Spotify(auth=access_token)
+
+    form = PlaylistButton()
+
+    if form.is_submitted() and form.validate():
+        print "Making playlist..."
+        user = sp.current_user()
+        playlist_name = form.name.data
+        create_playlist(sp, session['desired_songs_uris'].split(','), user, playlist_name)
+        return redirect(url_for('end'))
 
     EMOTION_IDX = {
         "anger" : 0,
@@ -210,13 +218,7 @@ def results():
     for track in result_tracks['tracks']:
         desired_songs_uris.append(track['uri'][14:])
 
-    form = PlaylistButton()
-
-    if form.is_submitted() and form.validate():
-        print "Making playlist..."
-        user = sp.current_user()
-        playlist_name = form.name.data
-        create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
+    session['desired_songs_uris'] = ",".join(desired_songs_uris)
 
     trackset_str = ','.join(e for e in desired_songs_uris)
 
