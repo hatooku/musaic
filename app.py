@@ -232,4 +232,4 @@ def end():
 # launch the app
 if __name__ == '__main__':
     app.secret_key = generateRandomString(16)
-    app.run(host='0.0.0.0', port=PORT_NUMBER, debug=True)
+    app.run(host='0.0.0.0', debug=True)
