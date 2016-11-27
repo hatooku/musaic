@@ -83,4 +83,4 @@ if __name__ == '__main__':
     # make sure non english songs dont' get lyrics
     test_cases.append(('If You', 'Big Bang'))
     for letter in test_cases:
-        print get_lyrics(letter[0], letter[1])
+        print(get_lyrics(letter[0], letter[1]))

@@ -220,6 +220,14 @@ def results():
 
     session['desired_songs_uris'] = ",".join(desired_songs_uris)
 
+    form = PlaylistButton()
+
+    if form.is_submitted() and form.validate():
+        print("Making playlist...")
+        user = sp.current_user()
+        playlist_name = form.name.data
+        create_playlist(sp, session['desired_songs_uris'], user, playlist_name)
+
     trackset_str = ','.join(e for e in desired_songs_uris)
 
     return render_template("results.html", uris = trackset_str, form=form)
